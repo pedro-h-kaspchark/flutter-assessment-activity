@@ -103,7 +103,6 @@ class _LoginPageState extends State<LoginPage> {
                     if (_formKey.currentState!.validate()) {
                       Navigator.pushNamed(context, 'welcome');
                     }
-                    Navigator.pushNamed(context, 'welcome');
                   },
                   child: Text('Entrar'),
                   style: ElevatedButton.styleFrom(
