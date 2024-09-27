@@ -1,80 +1,70 @@
-import 'package:atv/firebase_options.dart';
-import 'package:atv/view/create_account.dart';
-import 'package:atv/view/welcome.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CreateAccount extends StatefulWidget {
+  const CreateAccount({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
-        useMaterial3: true,
-      ),
-      home: LoginPage(),
-      routes: {
-        'welcome': (context) => Welcome(),
-        'createAccount': (context) =>  CreateAccount(),
-      }
-    );
-  }
+  State<CreateAccount> createState() => _CreateAccountState();
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login', style: TextStyle(color: Colors.white),),
+        title: const Text(
+          'Criar Conta',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 20),
-                Column( children: [
-                  Image.asset('assets/ticket.png'),
-                  
-                ]),
-                SizedBox(height: 50),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
+                Column(
+                  children: [
+                    Image.asset('assets/ticket.png'),
+                  ],
+                ),
+                const SizedBox(height: 50),
                 Padding(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   child: TextFormField(
-                    // controller: _emailController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo obrigatório';
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.person),
+                      label: Text('Nome de Usuário'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.email),
                       label: Text('Email'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -83,16 +73,16 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   child: TextFormField(
-                    // controller: _passwordController,
+                    obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo obrigatório';
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.lock),
                       label: Text('Senha'),
                       border: OutlineInputBorder(
@@ -101,14 +91,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       Navigator.pushNamed(context, 'welcome');
                     }
                   },
-                  child: Text('Entrar'),
+                  child: const Text('Criar Conta'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
@@ -117,10 +107,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-              TextButton(onPressed: () {}, child: Text('Esqueceu a senha?')),
-              TextButton(onPressed: () {
-                Navigator.pushNamed(context, 'createAccount');
-              }, child: Text('Criar conta')),
               ],
             ),
           ),
