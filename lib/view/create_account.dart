@@ -1,3 +1,5 @@
+import 'package:atv/services/authentication_service.dart';
+import 'package:atv/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -9,6 +11,13 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
+  
+  // Controladores adicionados e corrigidos
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  AuthenticationService _authenticationService = AuthenticationService();
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +48,10 @@ class _CreateAccountState extends State<CreateAccount> {
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
+                    controller: _nameController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Campo obrigatório';
+                        return 'O nome é obrigatório!';
                       }
                       return null;
                     },
@@ -57,9 +67,10 @@ class _CreateAccountState extends State<CreateAccount> {
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
+                    controller: _emailController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Campo obrigatório';
+                        return 'O email é obrigatório!';
                       }
                       return null;
                     },
@@ -75,10 +86,12 @@ class _CreateAccountState extends State<CreateAccount> {
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
+                    controller: _passwordController, 
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Campo obrigatório';
+                        return 'A senha é obrigatória!';
+
                       }
                       return null;
                     },
@@ -95,7 +108,29 @@ class _CreateAccountState extends State<CreateAccount> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.pushNamed(context, 'welcome');
+                      String name = _nameController.text;
+                      String email = _emailController.text;
+                      String password = _passwordController.text;
+
+                      _authenticationService.registerUser(
+                        name: name, 
+                        email: email, 
+                        password: password
+                      ).then((value) {
+                        if(value != null){
+                          SnackBarWidget(
+                            context: context,
+                            title: value, 
+                            isError: true
+                          );
+                        }else{
+                          SnackBarWidget(
+                            context: context,
+                            title: 'Cadastro efetuado com sucesso!', 
+                            isError: false);
+                          Navigator.pop(context);
+                        }
+                      });
                     }
                   },
                   child: const Text('Criar Conta'),
